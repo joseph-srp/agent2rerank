@@ -1,0 +1,10 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+numpy>=1.26,<2
+pandas>=2.3,<3
+pyarrow>=24,<25
+pyserini==0.37.0
+faiss-cpu>=1.7,<2
+torch==2.2.2+cpu
+transformers>=4.46,<5
+PyYAML>=6,<7
+pytest>=8,<9

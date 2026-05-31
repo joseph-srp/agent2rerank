@@ -1,0 +1,26 @@
+llm:
+  provider: openai_compatible
+  model: deepseek-v4-pro
+  base_url: https://api.deepseek.com/v1
+  api_key_env: DEEPSEEK_API_KEY
+  temperature: 0.2
+  max_tokens: 2048
+  timeout: 120
+
+agent:
+  max_turns: 8
+  search_top_k: 10
+  max_opened_products: 5
+  require_final_json: true
+
+retriever:
+  index_dir: /root/autodl-tmp/agent2rerank-data/indexes/esci_english_small_pyserini_lucene
+  k1: 0.9
+  b: 0.4
+
+data:
+  products_path: /root/autodl-tmp/agent2rerank-data/processed/esci_english_small/products.jsonl
+  queries_train_path: /root/autodl-tmp/agent2rerank-data/processed/esci_english_small/queries_train.jsonl
+  queries_dev_path: null
+  queries_test_path: /root/autodl-tmp/agent2rerank-data/processed/esci_english_small/queries_test.jsonl
+  outputs_dir: /root/autodl-tmp/agent2rerank-data/outputs

@@ -1,0 +1,10 @@
+data_root: /root/autodl-tmp/agent2rerank-data
+raw_dir: /root/autodl-tmp/agent2rerank-data/raw/esci_english_small
+processed_dir: /root/autodl-tmp/agent2rerank-data/processed/esci_english_small
+lucene_docs_dir: /root/autodl-tmp/agent2rerank-data/processed/esci_english_small/lucene_docs
+index_dir: /root/autodl-tmp/agent2rerank-data/indexes/esci_english_small_pyserini_lucene
+bm25_output_dir: /root/autodl-tmp/agent2rerank-data/outputs/bm25_runs
+bm25:
+  k1: 0.9
+  b: 0.4
+  top_k: 100
