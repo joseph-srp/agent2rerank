@@ -5,6 +5,7 @@ Phase 1 runs the complete closed loop:
 ```text
 ESCI query
   -> BM25 retriever
+  -> Qwen3-Reranker-0.6B reranked top100
   -> LRAT-style shopping agent
   -> structured trajectory
   -> session verifier
@@ -86,3 +87,16 @@ python experiments/phase1_agent_native/run_agent_trajectory.py --limit 5
 /root/autodl-tmp/agent2rerank-data/outputs/pairs/phase1_agent_pairs_train.jsonl
 /root/autodl-tmp/agent2rerank-data/outputs/pairs/phase1_agent_pairs_dev.jsonl
 ```
+
+## Qwen3 Reranker
+
+Qwen3 reranking is implemented with a Transformers backend that scores each query-product pair by the final-token probability of `yes` versus `no`. It reads BM25 JSONL runs and writes reranked JSONL runs under `/root/autodl-tmp/agent2rerank-data/outputs/rerank_runs/`.
+
+Main commands:
+
+```bash
+python experiments/phase1_agent_native/run_qwen3_rerank.py --split test --limit 3 --top-k 10 --mock
+python experiments/phase1_agent_native/evaluate_rerank.py --split test
+```
+
+Real Qwen3 inference should run in a GPU-capable environment using `requirements-reranker-gpu.txt`.

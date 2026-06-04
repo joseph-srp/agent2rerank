@@ -35,15 +35,18 @@ class SearchTool:
 
     def search(self, query: str, top_k: int | None = None) -> list[dict[str, Any]]:
         results = self.retriever.search(query, top_k=top_k or self.top_k)
-        return [
-            {
+        output = []
+        for item in results:
+            record = {
                 "rank": item["rank"],
                 "product_id": item["product_id"],
                 "bm25_score": item["bm25_score"],
                 "snippet": compact_product_snippet(item.get("product_text", ""), self.snippet_chars),
             }
-            for item in results
-        ]
+            if "rerank_score" in item:
+                record["rerank_score"] = item["rerank_score"]
+            output.append(record)
+        return output
 
     def __call__(self, query: str, top_k: int | None = None) -> list[dict[str, Any]]:
         return self.search(query=query, top_k=top_k)

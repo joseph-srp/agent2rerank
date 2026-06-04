@@ -69,6 +69,7 @@ The intended Phase 1 pipeline is:
 ```text
 ESCI query
   -> BM25 retriever
+  -> Qwen3-Reranker-0.6B reranked candidates
   -> LRAT-style shopping agent with search/get_document tools
   -> agent trajectory JSON
   -> session-level verifier JSON
@@ -113,3 +114,7 @@ Leave these for later phases unless the user explicitly changes scope:
 - Human-label-tuned baselines.
 - WebShop or other interactive benchmarks.
 - Multi-round self-improvement loops.
+
+## Qwen3 Reranker Runtime
+
+Qwen3 reranker inference is GPU-first and should use `requirements-reranker-gpu.txt`. The existing Pyserini environment remains CPU-oriented for indexing and BM25 retrieval.

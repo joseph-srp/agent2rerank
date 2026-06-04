@@ -41,6 +41,8 @@ class LRATStyleAgent:
         self.max_opened_products = max_opened_products
 
     def run(self, query: QueryRecord) -> Trajectory:
+        if hasattr(self.search_tool.retriever, "set_session"):
+            self.search_tool.retriever.set_session(query.query_id, query.query)
         messages: list[dict[str, Any]] = [
             {"role": "system", "content": SYSTEM_PROMPT},
             {

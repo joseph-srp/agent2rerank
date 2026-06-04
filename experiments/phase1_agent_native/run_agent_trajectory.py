@@ -14,6 +14,7 @@ from src.agent.lrat_style_agent import LRATStyleAgent
 from src.agent.schemas import QueryRecord
 from src.agent.tools import DocumentTool, SearchTool, iter_jsonl
 from src.agent.trajectory_logger import TrajectoryLogger
+from src.reranking.reranked_run import SessionRerankedRunRetriever
 from src.utils.config import load_yaml
 
 
@@ -72,17 +73,24 @@ def main() -> None:
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--output", type=Path, default=None)
     parser.add_argument("--mock", action="store_true", help="Use a deterministic mock backend for local smoke tests.")
+    parser.add_argument("--reranked-run", type=Path, default=None, help="Use a reranked JSONL run as the agent search source instead of BM25.")
     args = parser.parse_args()
 
     config = load_yaml(args.config)
     retriever_config = config["retriever"]
     agent_config = config["agent"]
-    search_tool = SearchTool.from_index(
-        retriever_config["index_dir"],
-        top_k=int(agent_config.get("search_top_k", 10)),
-        k1=float(retriever_config.get("k1", 0.9)),
-        b=float(retriever_config.get("b", 0.4)),
-    )
+    if args.reranked_run:
+        search_tool = SearchTool(
+            SessionRerankedRunRetriever(args.reranked_run),
+            top_k=int(agent_config.get("search_top_k", 10)),
+        )
+    else:
+        search_tool = SearchTool.from_index(
+            retriever_config["index_dir"],
+            top_k=int(agent_config.get("search_top_k", 10)),
+            k1=float(retriever_config.get("k1", 0.9)),
+            b=float(retriever_config.get("b", 0.4)),
+        )
     document_tool = DocumentTool(config["data"]["products_path"])
     backend = MockShoppingBackend() if args.mock else OpenAICompatibleBackend.from_config(config["llm"])
     agent = LRATStyleAgent(

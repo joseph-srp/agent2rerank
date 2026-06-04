@@ -1,0 +1,21 @@
+reranker:
+  model_name_or_path: Qwen/Qwen3-Reranker-0.6B
+  cache_dir: /root/autodl-tmp/agent2rerank-data/models
+  device: auto
+  dtype: bfloat16
+  max_length: 8192
+  batch_size: 8
+  candidate_top_k: 100
+  instruction: Given a user search query, determine whether the product document satisfies the query. Answer yes or no.
+
+data:
+  train:
+    bm25_run_path: /root/autodl-tmp/agent2rerank-data/outputs/bm25_runs/esci_train_bm25_top100.jsonl
+    qrels_path: /root/autodl-tmp/agent2rerank-data/processed/esci_english_small/qrels_train.jsonl
+    rerank_output_path: /root/autodl-tmp/agent2rerank-data/outputs/rerank_runs/esci_train_qwen3_rerank_top100.jsonl
+    metrics_output_path: /root/autodl-tmp/agent2rerank-data/outputs/eval/qwen3_rerank_metrics_train.json
+  test:
+    bm25_run_path: /root/autodl-tmp/agent2rerank-data/outputs/bm25_runs/esci_test_bm25_top100.jsonl
+    qrels_path: /root/autodl-tmp/agent2rerank-data/processed/esci_english_small/qrels_test.jsonl
+    rerank_output_path: /root/autodl-tmp/agent2rerank-data/outputs/rerank_runs/esci_test_qwen3_rerank_top100.jsonl
+    metrics_output_path: /root/autodl-tmp/agent2rerank-data/outputs/eval/qwen3_rerank_metrics_test.json
